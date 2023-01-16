@@ -1,0 +1,111 @@
+srun --cpus-per-task=1 --mem-per-cpu=1G --time=01:00:00 --pty bash
+
+Analysis of LTR retrotransposons
+
+1. Do for canu and flye
+COPIA:
+more all_gff_simplified.fasta.rexdb-plant.cls.pep | grep Ty1-RT | sed 's/>//' | sed 's/ .\+//' > Ty1-RT_IDs.txt
+seqkit grep -f Ty1-RT_IDs.txt all_gff_simplified.fasta.rexdb-plant.cls.pep -o all_copia.fasta
+
+GYPSY:
+more all_gff_simplified.fasta.rexdb-plant.cls.pep | grep Ty3-RT | sed 's/>//' | sed 's/ .\+//' > Ty3-RT_IDs.txt
+seqkit grep -f Ty3-RT_IDs.txt all_gff_simplified.fasta.rexdb-plant.cls.pep -o all_gypsy.fasta 
+ 
+2.
+COPIA:
+more Brassicaceae_repbase_all_march2019.fasta.rexdb-plant.cls.pep | grep Ty1-RT | sed 's/>//' | sed 's/ .\+//' > Ty1-RT_IDs.txt
+seqkit grep -f Ty1-RT_IDs.txt Brassicaceae_repbase_all_march2019.fasta.rexdb-plant.cls.pep -o all_copia.fasta
+
+GYPSY:
+more Brassicaceae_repbase_all_march2019.fasta.rexdb-plant.cls.pep | grep Ty3-RT | sed 's/>//' | sed 's/ .\+//' > Ty3-RT_IDs.txt
+seqkit grep -f Ty3-RT_IDs.txt Brassicaceae_repbase_all_march2019.fasta.rexdb-plant.cls.pep -o all_gypsy.fasta
+
+Im flye ordner und im canu ordner ausführen
+cat all_copia.fasta ../all_copia.fasta > merged_copia.fasta
+cat all_gypsy.fasta ../all_gypsy.fasta > merged_gypsy.fasta
+
+3. Für flye und canu
+sed -i 's/#.\+//' merged_copia.fasta
+sed -i 's/:/_/g' merged_copia.fasta
+
+sed -i 's/#.\+//' merged_gypsy.fasta
+sed -i 's/:/_/g' merged_gypsy.fasta
+
+4. Für flye und canu
+clustalo -i merged_copia.fasta -o copia_protein_alignment.fasta
+clustalo -i merged_gypsy.fasta -o gypsy_protein_alignment.fasta
+
+5.
+FastTree -out copia_tree copia_protein_alignment.fasta
+FastTree -out gypsy_tree gypsy_protein_alignment.fasta
+
+
+
+
+
+Dating of TEs
+# schauen wie pilon und contig in pilon.fasta genannt werden
+
+1. 
+awk '$3~/retrotransposon/' pilon.fasta.mod.EDTA.intact.gff3 > LTR_pilon.fasta.mod.EDTA.intact.gff3
+
+
+# vieles redundant, vielleicht würde letzter sed Befehl reichen... 
+# für flye zu pilon und contig ändern
+# für canu nur pilon ändern, heisst tig in fasta file....
+
+sed -i 's/ID.\+Name=//' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/;.\+//' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/ /\t/g' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/pil/pilon/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/tig/contig/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+
+sed -i 's/concontig/contig/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/pilono/pilon/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/pi/pilon/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/pil/pilon/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/pilo/pilon/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+sed -i 's/_p.\+\tEDTA/_pilon\tEDTA/' LTR_pilon.fasta.mod.EDTA.intact.gff3
+
+
+awk '{print($1,$2,$9,$4,$5,$6,$7,$8,$3)}' LTR_pilon.fasta.mod.EDTA.intact.gff3 |sed 's/ /\t/g' > final_LTR_pilon.fasta.mod.EDTA.intact.gff3
+
+module load UHTS/Analysis/BEDTools/2.29.2;
+
+bedtools getfasta -fi pilon.fasta -bed final_LTR_pilon.fasta.mod.EDTA.intact.gff3 -name > final_LTR_pilon.fasta.mod.EDTA.intact.fa
+
+
+2.
+sed -i 's/:/_/g' final_LTR_pilon.fasta.mod.EDTA.intact.fa
+sed -i 's/>/>Cvi_/' final_LTR_pilon.fasta.mod.EDTA.intact.fa
+sed -i 's/>Ler_/>Cvi_/' final_LTR_pilon.fasta.mod.EDTA.intact.fa #Korrektur weil vorher falsch gemacht
+
+3. 
+mkdir split_LTRs
+cp final_LTR_pilon.fasta.mod.EDTA.intact.fa split_LTRs/.
+
+4. 
+ln -s /data/courses/assembly-annotation-course/CDS_annotation/scripts/
+scripts/split_flat final_LTR_pilon.fasta.mod.EDTA.intact.fa 
+
+5.
+module add Emboss/EMBOSS/6.6.0;
+scripts/LTR Cvi_ N #in this case the "pattern" is "Cvi_"
+
+6. 
+scripts/date_pair > better_summary.txt #warning wenn sequenz kurz -> aufpassen bei analyse
+
+
+Sachen ausprobiert weil nirgends mehr steht zu welcher klasse TEs gehören....
+cd ../
+sort final_LTR_pilon.fasta.mod.EDTA.intact.gff3 > split_LTRs/sorted_final_LTR_pilon.fasta.mod.EDTA.intact.gff3
+cd split_LTRs
+sort better_summary.txt > sorted_better_summary.txt
+
+
+
+
+sed 's/ /\t/g' LTR_pilon.fasta.mod.EDTA.intact.gff3 > final_tab_LTR_pilon.fasta.mod.EDTA.intact.gff3
+
+bedtools getfasta -fi pilon.fasta -bed final_tab_LTR_pilon.fasta.mod.EDTA.intact.gff3 -fullHeader > final_tab_LTR_pilon.fasta.mod.EDTA.intact.fa
+

@@ -1,0 +1,23 @@
+#Interactive Session
+srun --cpus-per-task=2 --mem=8000 --time=1-00:00:00 --pty bash
+# Load modules
+module load UHTS/Analysis/SeqKit/0.13.2
+
+## 1) Prepare input files
+# Keep only Arabidopsis longest gene models (Tagged as LER_00000000-RA)
+grep -e "ID=LER_[0-9]*\-RA" gene_annotation/flye/pilon.maker.output/flye.annotated.gff > gene_duplication_events/flye/flye.annotated-RA.gff
+seqkit grep -n -r -p \-RA gene_annotation/flye/pilon.maker.output/flye.annotated.proteins.fasta -o gene_duplication_events/flye/flye.annotated.proteins-RA.fasta
+# Reformat gff file
+# filter gff lines with mRNA position
+grep -P "\tmRNA\t" flye.annotated-RA.gff > flye.annotated-mRNA.gff
+# Shorten ID
+sed 's/ID\=//' flye.annotated-mRNA.gff > flye.annotated-shortID_temp.gff
+sed 's/\-RA\;.*/\-RA/' flye.annotated-shortID_temp.gff > flye.annotated-shortID.gff
+rm flye.annotated-shortID_temp.gff
+# select columns 1,4,5,9 and rearrange them
+awk -F'\t' -v OFS="\t" '{ print $1, $9, $4, $5}' flye.annotated-shortID.gff > flye.annotated_final.gff
+
+# Create softlink to outgroup species
+ln -s /data/courses/assembly-annotation-course/CDS_annotation/NNU_mRNA_single_model.gff NNU_mRNA_single_model.gff
+ln -s /data/courses/assembly-annotation-course/CDS_annotation/NNU.pep.fa.ref.single_model NNU.pep.fa.ref.single_model
+

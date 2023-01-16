@@ -1,0 +1,397 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=1G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=get_length
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/length_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/length_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load UHTS/Analysis/SeqKit/0.13.2
+
+#path to genome
+in_dir=/data/users/lbrun/assembly_annotation_course/polishing
+
+#get the length of all contigs
+seqkit fx2tab -l -n ${in_dir}/flye/pilon.fasta
+echo -n "flye done, starting canu"
+seqkit fx2tab -l -n ${in_dir}/canu/pilon.fasta
+
+#copy the output into excel and sort it by size. Store the ID of the biggest one in a file (big_contig.txt)
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=1G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=big_contig_to_fasta
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/big_contig_to_fasta_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/big_contig_to_fasta_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load UHTS/Analysis/SeqKit/0.13.2
+
+#path to genome
+in_dir=/data/users/lbrun/assembly_annotation_course/polishing
+out_dir=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation
+
+# extract sequence of flye
+seqkit grep -n -f ${out_dir}/flye/big_contig.txt ${in_dir}/flye/pilon.fasta -o ${out_dir}/flye/big_contig.fasta
+
+# extract sequence of canu
+seqkit grep -n -f ${out_dir}/canu/big_contig.txt ${in_dir}/canu/pilon.fasta -o ${out_dir}/canu/big_contig.fasta
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=1G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=split_contig
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/split_contig_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/split_contig_%j.e
+#SBATCH --partition=pshort
+
+#load module
+module load UHTS/Analysis/SeqKit/0.13.2
+
+# path to directory
+DIR=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation
+
+# split flye
+seqkit sliding -s 500 -W 500 -g ${DIR}/flye/big_contig.fasta > ${DIR}/flye/contig_windows.fa
+
+# split canu
+seqkit sliding -s 500 -W 500 -g ${DIR}/canu/big_contig.fasta > ${DIR}/canu/contig_windows.fa
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=10
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=blast_window
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_window_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_window_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load Blast/ncbi-blast/2.9.0+
+
+#go to working directory of flye
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/flye
+
+# performe blasting for flye
+makeblastdb -in contig_windows.fasta -dbtype nucl -out blast_db/contig_windows
+
+blastn -query contig_windows.fasta -db blast_db/contig_windows -num_threads 10 -outfmt 6 -perc_identity 80 -max_hsps 1 > contig_windows.blastn
+
+
+#go to working directory of canu
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+# performe blasting for flye
+makeblastdb -in contig_windows.fasta -dbtype nucl -out
+blast_db/contig_windows
+blastn -query contig_windows.fasta -db blast_db/contig_windows -num_threads
+10 -outfmt 6 -perc_identity 80 -max_hsps 1 > contig_windows.blastn
+
+
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=most_abundant
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_window_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_window_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load UHTS/Analysis/SeqKit/0.13.2
+
+#go to working directory of flye
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/flye
+
+#before the next step, save the 50-most abundant files in a new fasta file
+cut -f1 contig_windows.blastn | sort | uniq -c | sort -k1,1 -n | tail -n 50 | cut -f6 -d ' ' > top_contig_windows.txt
+
+#save 50 most abundant 500bp-windows into new fasta file
+seqkit grep -n -f top_contig_windows.txt contig_windows.fasta -o contig_windows_TOP50.fasta
+
+#go to working directory of canu
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+#before the next step, save the 50-most abundant files in a new fasta file
+cut -f1 contig_windows.blastn | sort | uniq -c | sort -k1,1 -n | tail -n 50 | cut -f8 -d ' ' > top_contig_windows.txt
+
+#save 50 most abundant 500bp-windows into new fasta file
+seqkit grep -n -f top_contig_windows.txt contig_windows.fasta -o contig_windows_TOP50.fasta
+
+
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=blast_candidate
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_candidate_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_candidate_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load Blast/ncbi-blast/2.9.0+
+
+#go to working directory of canu
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+#make database with genome
+makeblastdb -in /data/users/lbrun/assembly_annotation_course/polishing/canu/pilon.fasta \
+-dbtype nucl -out blast_db/genome
+
+#blast against candidate family 18 
+blastn -query candidate_TE.fasta -db blast_db/genome -outfmt 6 -num_threads 10 -
+perc_identity 80 -max_hsps 1 > candidate_TE.blastn
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=blast_to_bed
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_to_bed_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_to_blast_%j.e
+#SBATCH --partition=pcourseassembly
+
+#go to working directory
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+awk '$10 < $9 {print($2"\t"$10-1"\t"$9)}' candidate_TE.blastn > candidate_TE.bed
+awk '$10 > $9 {print($2"\t"$9-1"\t"$10)}' candidate_TE.blastn >> candidate_TE.bed
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=extract_TE
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/extract_TE_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/extract_TE_%j.e
+#SBATCH --partition=pcourseassembly
+
+
+module load UHTS/Analysis/SeqKit/0.13.2
+
+#go to working directory
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+seqkit subseq --bed candidate_TE.bed /data/users/lbrun/assembly_annotation_course/polishing/canu/pilon.fasta -u 2000 -d 2000 >
+TE_candidate_window.bed.fa
+
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=align_TE
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/align_TE_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/align_TE_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load SequenceAnalysis/MultipleSequenceAlignment/clustalw2/2.1
+
+#go to working directory
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+
+clustalw2 TE_candidate_window.bed.fa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=write_cons
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/write_cons_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/write_cons_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load Emboss/EMBOSS/6.6.0
+
+#go to working directory
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+cons -sequence TE_family_polished.txt -outseq TE_family_polished.cons -name TE_cons
+
+
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=10
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=blast_against_ref
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_against_ref_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_against_ref_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load Blast/ncbi-blast/2.9.0+
+
+#go to working directory of canu
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+#make database with genome
+makeblastdb -in /data/courses/assemblyannotation-course/CDS_annotation/Brassicaceae_repbase_all_march2019.fasta
+-dbtype nucl -out blast_db/Brassicaceae
+
+blastn -query TE_family_polished.cons -db blast_db/Brassicaceae -outfmt 6 -num_threads 10 -perc_identity 80 -max_hsps 1 > TE_family_polished.blastn
+
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=10
+#SBATCH --mem-per-cpu=2G
+#SBATCH --time=00:10:00
+#SBATCH --job-name=blast_against_EDTA
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_against_EDTA_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/blast_against_EDTA_%j.e
+#SBATCH --partition=pcourseassembly
+
+#load module
+module load Blast/ncbi-blast/2.9.0+
+
+#go to working directory of canu
+cd /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/manual_annotation/canu
+
+#make database with genome
+makeblastdb -in /data/users/lbrun/assembly_annotation_course/annotation/transposable_element/canu/pilon.fasta.mod.EDTA.TElib.fa \ 
+-dbtype nucl -out blast_db/EDTA_canu
+
+blastn -query TE_family_polished.cons -db blast_db/EDTA_canu -outfmt 6 -num_threads 10 -perc_identity 80 -max_hsps 1 > TE_family_polished_EDTA.blastn
+
+
+
+
+
+
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=4
+#SBATCH --mem-per-cpu=10G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=TE_sorter
+#SBATCH --mail-user=livbrundel@gmail.com
+#SBATCH --mail-type=begin,end
+#SBATCH --output=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/TE_sorter_%j.o
+#SBATCH --error=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/TE_sorter_%j.e
+#SBATCH --partition=pcourseassembly
+
+
+# Define paths to directories
+CONTAINER=/data/courses/assembly-annotation-course
+WORKDIR=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/flye
+WORKDIR=/data/users/lbrun/assembly_annotation_course/annotation/transposable_element/canu
+
+# Go to working directory
+cd $WORKDIR/
+
+# Run TEsorter for polished flye and canu assembly
+singularity exec \
+--bind $CONTAINER \
+--bind $WORKDIR \
+$CONTAINER/containers2/TEsorter_1.3.0.sif \
+TEsorter $WORKDIR/all_gff_simplified.fasta -db rexdb-plant
