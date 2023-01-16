@@ -1,0 +1,365 @@
+./assembly_annotation_course/
+├── annotation
+│   ├── protein_coding_seq
+│   │   └── automatic_annotation
+│   │       ├── annotation_QC
+│   │       │   ├── BUSCO
+│   │       │   │   ├── canu
+│   │       │   │   │   ├── gene_annotation
+│   │       │   │   │   │   ├── logs
+│   │       │   │   │   │   └── run_brassicales_odb10
+│   │       │   │   │   │       ├── busco_sequences
+│   │       │   │   │   │       │   ├── fragmented_busco_sequences
+│   │       │   │   │   │       │   ├── multi_copy_busco_sequences
+│   │       │   │   │   │       │   └── single_copy_busco_sequences
+│   │       │   │   │   │       └── hmmer_output
+│   │       │   │   │   │           ├── initial_run_results
+│   │       │   │   │   │           └── rerun_results
+│   │       │   │   │   └── lineages
+│   │       │   │   │       └── brassicales_odb10
+│   │       │   │   │           ├── hmms
+│   │       │   │   │           ├── info
+│   │       │   │   │           └── prfl
+│   │       │   │   └── flye
+│   │       │   │       ├── gene_annotation
+│   │       │   │       │   ├── logs
+│   │       │   │       │   └── run_brassicales_odb10
+│   │       │   │       │       ├── busco_sequences
+│   │       │   │       │       │   ├── fragmented_busco_sequences
+│   │       │   │       │       │   ├── multi_copy_busco_sequences
+│   │       │   │       │       │   └── single_copy_busco_sequences
+│   │       │   │       │       └── hmmer_output
+│   │       │   │       │           ├── initial_run_results
+│   │       │   │       │           └── rerun_results
+│   │       │   │       └── lineages
+│   │       │   │           └── brassicales_odb10
+│   │       │   │               ├── hmms
+│   │       │   │               ├── info
+│   │       │   │               └── prfl
+│   │       │   └── Salmon
+│   │       │       ├── canu
+│   │       │       │   ├── transcript_index
+│   │       │       │   └── transcript_quant
+│   │       │       │       ├── aux_info
+│   │       │       │       ├── libParams
+│   │       │       │       └── logs
+│   │       │       └── flye
+│   │       │           ├── transcript_index
+│   │       │           └── transcript_quant
+│   │       │               ├── aux_info
+│   │       │               ├── libParams
+│   │       │               └── logs
+│   │       ├── canu
+│   │       │   ├── _Inline
+│   │       │   │   └── build
+│   │       │   │       └── Bio
+│   │       │   │           └── DB
+│   │       │   │               └── IndexedBase_168b
+│   │       │   │                   └── blib
+│   │       │   │                       ├── arch
+│   │       │   │                       │   └── auto
+│   │       │   │                       │       └── Bio
+│   │       │   │                       │           └── DB
+│   │       │   │                       │               └── IndexedBase_168b
+│   │       │   │                       ├── bin
+│   │       │   │                       ├── lib
+│   │       │   │                       │   ├── auto
+│   │       │   │                       │   │   └── Bio
+│   │       │   │                       │   │       └── DB
+│   │       │   │                       │   │           └── IndexedBase_168b
+│   │       │   │                       │   └── Bio
+│   │       │   │                       │       └── DB
+│   │       │   │                       ├── man1
+│   │       │   │                       ├── man3
+│   │       │   │                       └── script
+│   │       │   └── pilon.maker.output
+│   │       │       └── mpi_blastdb
+│   │       │           ├── Atal_v10_CDS_proteins.mpi.10
+│   │       │           ├── pilon%2Efasta.mpi.1
+│   │       │           ├── PTREP20.mpi.10
+│   │       │           └── Trinity%2Efasta.mpi.10
+│   │       ├── flye
+│   │       │   ├── _Inline
+│   │       │   │   └── build
+│   │       │   │       └── Bio
+│   │       │   │           └── DB
+│   │       │   │               └── IndexedBase_168b
+│   │       │   │                   └── blib
+│   │       │   │                       ├── arch
+│   │       │   │                       │   └── auto
+│   │       │   │                       │       └── Bio
+│   │       │   │                       │           └── DB
+│   │       │   │                       │               └── IndexedBase_168b
+│   │       │   │                       ├── bin
+│   │       │   │                       ├── lib
+│   │       │   │                       │   ├── auto
+│   │       │   │                       │   │   └── Bio
+│   │       │   │                       │   │       └── DB
+│   │       │   │                       │   │           └── IndexedBase_168b
+│   │       │   │                       │   └── Bio
+│   │       │   │                       │       └── DB
+│   │       │   │                       ├── man1
+│   │       │   │                       ├── man3
+│   │       │   │                       └── script
+│   │       │   └── pilon.maker.output
+│   │       │       └── mpi_blastdb
+│   │       │           ├── Atal_v10_CDS_proteins.mpi.10
+│   │       │           ├── pilon%2Efasta.mpi.1
+│   │       │           ├── PTREP20.mpi.10
+│   │       │           └── Trinity%2Efasta.mpi.10
+│   │       ├── gene_duplication
+│   │       │   ├── blast_db
+│   │       │   ├── canu
+│   │       │   │   ├── blast_db
+│   │       │   │   ├── DupGenfinder_input
+│   │       │   │   └── DupGenfinder_output
+│   │       │   │       └── genome_dup_events
+│   │       │   └── flye
+│   │       │       ├── blast_db
+│   │       │       ├── DupGenfinder_input
+│   │       │       └── DupGenfinder_output
+│   │       │           └── genome_dup_events
+│   │       └── trinity
+│   │           ├── trinity_canu
+│   │           └── trinity_flye
+│   └── transposable_element
+│       ├── canu
+│       │   ├── pilon.fasta.mod.EDTA.anno
+│       │   ├── pilon.fasta.mod.EDTA.combine
+│       │   ├── pilon.fasta.mod.EDTA.final
+│       │   │   └── pilon.fasta.mod.EDTA.raw.fa.preWedOct191816112022.RMoutput
+│       │   ├── pilon.fasta.mod.EDTA.raw
+│       │   │   ├── Helitron
+│       │   │   ├── LTR
+│       │   │   └── TIR
+│       │   │       ├── Module3_New
+│       │   │       │   ├── temp
+│       │   │       │   ├── TIR-Learner
+│       │   │       │   └── TIR-Learner-Result
+│       │   │       └── TIR-Learner-Result
+│       │   └── split_LTRs
+│       │       └── scripts -> /data/courses/assembly-annotation-course/CDS_annotation/scripts/
+│       ├── flye
+│       │   ├── pilon.fasta.mod.EDTA.anno
+│       │   ├── pilon.fasta.mod.EDTA.combine
+│       │   ├── pilon.fasta.mod.EDTA.final
+│       │   │   └── pilon.fasta.mod.EDTA.raw.fa.preWedOct191712452022.RMoutput
+│       │   ├── pilon.fasta.mod.EDTA.raw
+│       │   │   ├── Helitron
+│       │   │   ├── LTR
+│       │   │   └── TIR
+│       │   │       ├── Module3_New
+│       │   │       │   ├── temp
+│       │   │       │   ├── TIR-Learner
+│       │   │       │   └── TIR-Learner-Result
+│       │   │       └── TIR-Learner-Result
+│       │   └── split_LTRs
+│       │       └── scripts -> /data/courses/assembly-annotation-course/CDS_annotation/scripts/
+│       └── manual_annotation
+│           ├── canu
+│           │   └── blast_db
+│           └── flye
+│               └── blast_db
+├── assemblies
+│   ├── canu
+│   │   ├── canu-logs
+│   │   ├── canu-scripts
+│   │   ├── canu.seqStore
+│   │   │   ├── version.001
+│   │   │   ├── version.002
+│   │   │   └── version.003
+│   │   ├── correction
+│   │   │   ├── 0-mercounts
+│   │   │   ├── 1-overlapper
+│   │   │   ├── 2-correction
+│   │   │   │   └── results
+│   │   │   └── canu.corStore
+│   │   ├── trimming
+│   │   │   ├── 0-mercounts
+│   │   │   ├── 1-overlapper
+│   │   │   └── 3-overlapbasedtrimming
+│   │   └── unitigging
+│   │       ├── 0-mercounts
+│   │       ├── 1-overlapper
+│   │       ├── 3-overlapErrorAdjustment
+│   │       ├── 4-unitigger
+│   │       ├── 5-consensus
+│   │       ├── canu.ctgStore
+│   │       └── canu.ovlStore
+│   │           ├── logs
+│   │           └── scripts
+│   ├── flye
+│   │   ├── 00-assembly
+│   │   ├── 10-consensus
+│   │   ├── 20-repeat
+│   │   ├── 30-contigger
+│   │   └── 40-polishing
+│   └── Trinity
+│       ├── chrysalis
+│       ├── insilico_read_normalization
+│       └── read_partitions
+├── evaluation
+│   ├── canu
+│   │   ├── BUSCO
+│   │   │   ├── initial_assembly
+│   │   │   │   ├── logs
+│   │   │   │   └── run_brassicales_odb10
+│   │   │   │       ├── busco_sequences
+│   │   │   │       │   ├── fragmented_busco_sequences
+│   │   │   │       │   ├── multi_copy_busco_sequences
+│   │   │   │       │   └── single_copy_busco_sequences
+│   │   │   │       ├── hmmer_output
+│   │   │   │       │   ├── initial_run_results
+│   │   │   │       │   └── rerun_results
+│   │   │   │       └── metaeuk_output
+│   │   │   │           ├── initial_results
+│   │   │   │           └── rerun_results
+│   │   │   └── polished_assembly
+│   │   │       ├── logs
+│   │   │       └── run_brassicales_odb10
+│   │   │           ├── busco_sequences
+│   │   │           │   ├── fragmented_busco_sequences
+│   │   │           │   ├── multi_copy_busco_sequences
+│   │   │           │   └── single_copy_busco_sequences
+│   │   │           ├── hmmer_output
+│   │   │           │   ├── initial_run_results
+│   │   │           │   └── rerun_results
+│   │   │           └── metaeuk_output
+│   │   │               ├── initial_results
+│   │   │               └── rerun_results
+│   │   ├── merqury
+│   │   │   ├── initial_assembly
+│   │   │   │   ├── canu.contigs.meryl
+│   │   │   │   ├── logs
+│   │   │   │   ├── pilon.meryl
+│   │   │   │   └── union.meryl -> /data/users/lbrun/assembly_annotation_course/evaluation/meryl/union.meryl
+│   │   │   └── polished_assembly
+│   │   ├── mummer
+│   │   └── QUAST
+│   │       ├── initial
+│   │       │   ├── basic_stats
+│   │       │   └── icarus_viewers
+│   │       ├── initial_ref
+│   │       │   ├── aligned_stats
+│   │       │   ├── basic_stats
+│   │       │   ├── contigs_reports
+│   │       │   │   └── minimap_output
+│   │       │   ├── genome_stats
+│   │       │   └── icarus_viewers
+│   │       ├── polished
+│   │       │   ├── basic_stats
+│   │       │   └── icarus_viewers
+│   │       └── polished_ref
+│   │           ├── aligned_stats
+│   │           ├── basic_stats
+│   │           ├── contigs_reports
+│   │           │   └── minimap_output
+│   │           ├── genome_stats
+│   │           └── icarus_viewers
+│   ├── flye
+│   │   ├── BUSCO
+│   │   │   ├── initial_assembly
+│   │   │   │   ├── logs
+│   │   │   │   └── run_brassicales_odb10
+│   │   │   │       ├── busco_sequences
+│   │   │   │       │   ├── fragmented_busco_sequences
+│   │   │   │       │   ├── multi_copy_busco_sequences
+│   │   │   │       │   └── single_copy_busco_sequences
+│   │   │   │       ├── hmmer_output
+│   │   │   │       │   ├── initial_run_results
+│   │   │   │       │   └── rerun_results
+│   │   │   │       └── metaeuk_output
+│   │   │   │           ├── initial_results
+│   │   │   │           └── rerun_results
+│   │   │   └── polished_assembly
+│   │   │       ├── logs
+│   │   │       └── run_brassicales_odb10
+│   │   │           ├── busco_sequences
+│   │   │           │   ├── fragmented_busco_sequences
+│   │   │           │   ├── multi_copy_busco_sequences
+│   │   │           │   └── single_copy_busco_sequences
+│   │   │           ├── hmmer_output
+│   │   │           │   ├── initial_run_results
+│   │   │           │   └── rerun_results
+│   │   │           └── metaeuk_output
+│   │   │               ├── initial_results
+│   │   │               └── rerun_results
+│   │   ├── merqury
+│   │   │   ├── initial_assembly
+│   │   │   │   ├── assembly.meryl
+│   │   │   │   ├── logs
+│   │   │   │   └── union.meryl -> /data/users/lbrun/assembly_annotation_course/evaluation/meryl/union.meryl
+│   │   │   └── polished_assembly
+│   │   │       ├── logs
+│   │   │       ├── pilon.meryl
+│   │   │       └── union.meryl -> /data/users/lbrun/assembly_annotation_course/evaluation/meryl/union.meryl
+│   │   ├── mummer
+│   │   ├── mummer_older_version
+│   │   └── QUAST
+│   │       ├── initial
+│   │       │   ├── basic_stats
+│   │       │   └── icarus_viewers
+│   │       ├── initial_ref
+│   │       │   ├── aligned_stats
+│   │       │   ├── basic_stats
+│   │       │   ├── contigs_reports
+│   │       │   │   └── minimap_output
+│   │       │   ├── genome_stats
+│   │       │   └── icarus_viewers
+│   │       ├── polished
+│   │       │   ├── basic_stats
+│   │       │   └── icarus_viewers
+│   │       └── polished_ref
+│   │           ├── aligned_stats
+│   │           ├── basic_stats
+│   │           ├── contigs_reports
+│   │           │   └── minimap_output
+│   │           ├── genome_stats
+│   │           └── icarus_viewers
+│   ├── meryl
+│   │   ├── read1.meryl
+│   │   ├── read2.meryl
+│   │   └── union.meryl
+│   ├── QUAST_all
+│   │   ├── basic_stats
+│   │   └── icarus_viewers
+│   ├── QUAST_all_ref
+│   │   ├── aligned_stats
+│   │   ├── basic_stats
+│   │   ├── contigs_reports
+│   │   │   └── minimap_output
+│   │   ├── genome_stats
+│   │   └── icarus_viewers
+│   └── Trinity
+│       └── BUSCO
+│           └── initial_assembly
+│               ├── logs
+│               └── run_brassicales_odb10
+│                   ├── busco_sequences
+│                   │   ├── fragmented_busco_sequences
+│                   │   ├── multi_copy_busco_sequences
+│                   │   └── single_copy_busco_sequences
+│                   ├── hmmer_output
+│                   │   ├── initial_run_results
+│                   │   └── rerun_results
+│                   └── metaeuk_output
+│                       ├── initial_results
+│                       └── rerun_results
+├── participant_2 -> /data/courses/assembly-annotation-course/raw_data/Cvi-0/participant_2/
+├── polishing
+│   ├── canu
+│   └── flye
+├── read_QC
+│   ├── fastqc
+│   │   ├── Illumina
+│   │   ├── pacbio
+│   │   └── RNAseq
+│   └── kmer_counting
+└── scripts
+    ├── busco_downloads
+    │   └── lineages
+    │       └── brassicales_odb10
+    │           └── prfl
+    └── logs
+
+362 directories
